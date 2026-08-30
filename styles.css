@@ -2,3 +2,21 @@
 @media(max-width:900px){.main-nav{display:none;position:absolute;top:78px;left:0;right:0;background:#181616;padding:25px;flex-direction:column;align-items:stretch;border-top:1px solid #444}.main-nav.open{display:flex}.menu-button{display:flex;align-items:center;gap:5px}.menu-button span{display:none}.menu-button b{text-transform:uppercase;font-size:11px}.hero-grid,.split-section,.trade-section,.guide-grid{grid-template-columns:1fr}.hero-grid{min-height:auto}.hero-copy{padding:80px 24px 50px}.hero-visual{min-height:500px}.stat-stamp{left:25px}.outlined-diamond{right:30px;top:auto;bottom:-80px}.image-panel{min-height:520px}.retailer-grid{grid-template-columns:1fr}.benefits{grid-template-columns:1fr}.benefits article{border-right:0;border-bottom:1px solid rgba(0,0,0,.25)}.trade-photo{min-height:550px}.green-diamond{left:35px}.brand-strip{grid-template-columns:1fr 1fr}.brand-strip span{border-bottom:1px solid #555}.join-section,.future-section{align-items:flex-start;flex-direction:column}footer{grid-template-columns:1fr}}
 @media(max-width:560px){.site-header{height:68px}.main-nav{top:68px}.hero h1{font-size:54px}.hero-photo{inset:0}.hero-visual{min-height:430px}.stat-stamp{width:105px;height:105px;top:25px}.tile-mark{width:115px;height:115px;border-width:10px}.ticker{justify-content:flex-start}.section-pad{padding:75px 20px}.search-row{grid-template-columns:1fr}.search-row .button{width:100%}.trust-points{flex-direction:column;gap:10px}.content-panel,.trade-copy{padding:75px 22px}.image-panel{min-height:400px}.retailer-grid{gap:25px}.number-block strong{font-size:140px}.number-block span{font-size:12px}.guide-image{height:250px}.guide-list strong{font-size:18px}.photo-label{left:22px;font-size:38px}.brand-strip span{min-height:90px}.brand-strip{grid-template-columns:1fr 1fr}footer{padding:45px 22px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.button{transition:none}}
+
+/* Tilers Community identity and expanded stakeholder content */
+.brand-image{width:220px;height:52px;overflow:hidden}
+.brand-image img{width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
+.finder-identity{display:block;width:min(100%,430px);height:auto;margin:0 0 34px;background:#111;border:1px solid #222}
+.manufacturer-section{background:#fff}
+.manufacturer-section .section-heading h2{font-size:clamp(48px,6vw,82px)}
+.manufacturer-section .section-heading>p:last-child{font-size:17px}
+.manufacturer-grid{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid #222;margin:45px 0}
+.manufacturer-grid article{padding:35px;border-right:1px solid #bbb}
+.manufacturer-grid article:last-child{border-right:0}
+.manufacturer-grid span{font:800 18px var(--display);color:#279e20}
+.manufacturer-grid h3{font:800 28px var(--display);text-transform:uppercase;margin:14px 0}
+.manufacturer-grid p{font-size:13px;color:var(--muted)}
+.brands-intro{max-width:620px;color:#aaa}
+.footer-brand{width:230px}
+@media(max-width:900px){.manufacturer-grid{grid-template-columns:1fr}.manufacturer-grid article{border-right:0;border-bottom:1px solid #bbb}.manufacturer-grid article:last-child{border-bottom:0}}
+@media(max-width:560px){.brand-image{width:175px;height:42px}.finder-identity{margin-bottom:24px}}
