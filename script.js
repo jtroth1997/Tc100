@@ -38,9 +38,18 @@ const input = document.querySelector('#postcode');
 const profileDialog = document.querySelector('#profile-dialog');
 const profileContent = document.querySelector('#profile-content');
 
+function escapeHTML(value) {
+  return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+}
+
 function renderResults(items, query, exactMatch) {
   results.innerHTML = '';
   results.classList.add('visible');
+  if (!items.length) {
+    results.innerHTML = `<div class="empty-results"><strong>No matching ${labels[finderType].toLowerCase()} profiles yet</strong><p>We couldn’t find a current Tilers Community profile for “${escapeHTML(query)}”. Try a nearby town, a wider postcode area or another directory category.</p><a class="button button-dark" href="https://www.facebook.com/groups/1502340233579741/" target="_blank" rel="noopener">Ask the community <span>↗</span></a></div>`;
+    message.textContent = `No directory matches found for “${query}”.`;
+    return;
+  }
   const heading = document.createElement('div');
   heading.className = 'results-heading';
   heading.innerHTML = `<div><small>Directory results</small><strong>${items.length} ${items.length === 1 ? 'business' : 'businesses'} shown</strong></div><span>${labels[finderType]}</span>`;
@@ -48,11 +57,49 @@ function renderResults(items, query, exactMatch) {
   items.forEach((business) => {
     const card = document.createElement('article');
     card.className = 'result-card';
-    card.innerHTML = `<div class="result-monogram" aria-hidden="true">${business.name.charAt(0)}</div><div class="result-copy"><span class="result-type">${business.types.map((type) => labels[type]).filter(Boolean).join(' · ')}</span><h3>${business.name}</h3><p>${business.address}</p><small>${business.region}</small></div><button class="profile-button" type="button">View profile →</button>`;
+    card.innerHTML = `<div class="result-monogram" aria-hidden="true">${business.name.charAt(0)}</div><div class="result-copy"><span class="result-type">${business.types.map((type) => labels[type]).filter(Boolean).join(' · ')}</span><h3>${business.name}</h3><p>${business.address}</p><small>${business.distance !== undefined ? `${business.distance.toFixed(1)} miles away · ` : ''}${business.region}</small></div><button class="profile-button" type="button">View profile →</button>`;
     card.querySelector('.profile-button').addEventListener('click', () => openProfile(business));
     results.appendChild(card);
   });
-  message.textContent = exactMatch ? `Tilers Community profiles matching “${query}”.` : `No exact text match for “${query}”, so we’re showing relevant ${labels[finderType].toLowerCase()} profiles.`;
+  message.textContent = exactMatch ? `Tilers Community profiles matching “${query}”.` : `${items.length} nearest ${labels[finderType].toLowerCase()} ${items.length === 1 ? 'profile' : 'profiles'} to “${query}”.`;
+}
+
+function extractPostcode(text) {
+  const match = text.toUpperCase().match(/\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/);
+  return match ? match[1].replace(/\s+/g, '') : null;
+}
+
+function postcodeFromAddress(address) {
+  return extractPostcode(address);
+}
+
+function distanceMiles(a, b) {
+  const radius = 3958.8;
+  const toRad = (degrees) => degrees * Math.PI / 180;
+  const latitude = toRad(b.latitude - a.latitude);
+  const longitude = toRad(b.longitude - a.longitude);
+  const value = Math.sin(latitude / 2) ** 2 + Math.cos(toRad(a.latitude)) * Math.cos(toRad(b.latitude)) * Math.sin(longitude / 2) ** 2;
+  return radius * 2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+}
+
+async function searchByPostcode(postcode, businesses) {
+  const businessPostcodes = businesses.map((business) => postcodeFromAddress(business.address)).filter(Boolean);
+  const uniquePostcodes = [...new Set([postcode, ...businessPostcodes])];
+  const response = await fetch('https://api.postcodes.io/postcodes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ postcodes: uniquePostcodes })
+  });
+  if (!response.ok) throw new Error('Postcode lookup unavailable');
+  const payload = await response.json();
+  const locations = new Map(payload.result.filter((item) => item.result).map((item) => [item.query.replace(/\s+/g, ''), item.result]));
+  const origin = locations.get(postcode);
+  if (!origin) return [];
+  return businesses.map((business) => {
+    const businessPostcode = postcodeFromAddress(business.address);
+    const destination = businessPostcode ? locations.get(businessPostcode) : null;
+    return destination ? { ...business, distance: distanceMiles(origin, destination) } : null;
+  }).filter(Boolean).sort((a, b) => a.distance - b.distance).filter((business) => business.distance <= 100).slice(0, 8);
 }
 
 function openProfile(business) {
@@ -74,13 +121,30 @@ document.querySelectorAll('.finder-tabs button').forEach((button) => button.addE
   results.classList.remove('visible');
 }));
 
-document.querySelector('#finder-form').addEventListener('submit', (event) => {
+document.querySelector('#finder-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const query = input.value.trim();
   const normalised = query.toLowerCase().replace(/\s+/g, ' ');
   const typeMatches = directory.filter((business) => business.types.includes(finderType));
-  const exactMatches = typeMatches.filter((business) => `${business.name} ${business.address} ${business.region}`.toLowerCase().includes(normalised));
-  renderResults((exactMatches.length ? exactMatches : typeMatches).slice(0, 8), query, exactMatches.length > 0);
+  const postcode = extractPostcode(query);
+  if (postcode) {
+    message.textContent = `Finding the nearest ${labels[finderType].toLowerCase()} profiles…`;
+    try {
+      const nearby = await searchByPostcode(postcode, typeMatches);
+      renderResults(nearby, query, false);
+    } catch (error) {
+      const outward = postcode.match(/^[A-Z]{1,2}\d[A-Z\d]?/)[0];
+      const fallback = typeMatches.filter((business) => business.address.toUpperCase().includes(outward));
+      renderResults(fallback, query, fallback.length > 0);
+    }
+  } else {
+    const terms = normalised.split(' ').filter((term) => term.length > 1);
+    const exactMatches = typeMatches.filter((business) => {
+      const haystack = `${business.name} ${business.address} ${business.region}`.toLowerCase();
+      return terms.every((term) => haystack.includes(term));
+    });
+    renderResults(exactMatches.slice(0, 8), query, exactMatches.length > 0);
+  }
   results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 

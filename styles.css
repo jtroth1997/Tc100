@@ -60,6 +60,7 @@ p{line-height:1.65}
 .result-copy small{color:#777}
 .result-card>a,.profile-button{font-size:10px;text-transform:uppercase;font-weight:800;border:0;border-bottom:2px solid var(--green);padding:4px 0;background:none;cursor:pointer;color:#181616}
 .directory-source{font-size:11px;color:#62635f;margin:20px 0 0;max-width:850px}
+.empty-results{padding:38px 5px}.empty-results strong{display:block;font:900 clamp(30px,5vw,48px)/.95 var(--display);text-transform:uppercase}.empty-results p{max-width:680px;color:#5d5e5a}.empty-results .button{margin-top:12px}
 .source-note{color:#b8b8b3}
 @media(max-width:1100px){.main-nav{display:none;position:absolute;top:78px;left:0;right:0;background:#181616;padding:25px;flex-direction:column;align-items:stretch;border-top:1px solid #444}.main-nav.open{display:flex}.menu-button{display:flex;align-items:center;gap:5px}.menu-button span{display:none}.menu-button b{text-transform:uppercase;font-size:11px}}
 @media(max-width:700px){.result-card{grid-template-columns:48px 1fr}.result-card>a{grid-column:2}.results-heading{align-items:flex-start;flex-direction:column}.brand-image{width:190px}.finder-card{box-shadow:7px 7px 0 var(--green)}}
