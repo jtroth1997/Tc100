@@ -12,7 +12,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand brand-image" href="#top" aria-label="Tilers Community home"><img src="assets/tilers-community-logo.jpeg" alt="Tilers Community"></a>
+    <a class="brand brand-image" href="#top" aria-label="Tilers Community home"><img src="assets/tilers-community-logo-dark-bg.png" alt="Tilers Community"></a>
     <button class="menu-button" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b>Menu</b></button>
     <nav id="main-nav" class="main-nav" aria-label="Main navigation">
       <a href="#homeowners">Find a tiler</a><a href="#trade">For tilers</a><a href="#retailers">TC100 retailers</a><a href="#manufacturers">For brands</a><a href="#guides">Advice</a>
@@ -41,10 +41,12 @@
     <section id="find" class="finder section-pad">
       <div class="section-heading reveal"><p class="eyebrow dark">Start your project</p><h2>Find the right people, <em>near you.</em></h2></div>
       <div class="finder-card reveal">
-        <img class="finder-identity" src="assets/find-a-tiler-logo.jpeg" alt="Find a Tiler by Tilers Community">
+        <img class="finder-identity" src="assets/find-a-tiler-logo.jpg" alt="Find a Tiler by Tilers Community">
         <div class="finder-tabs" role="tablist"><button class="active" data-type="tiler" role="tab">Tilers</button><button data-type="retailer" role="tab">TC100 retailers</button><button data-type="tile" role="tab">Tiles</button><button data-type="product" role="tab">Products</button><button data-type="service" role="tab">Services</button></div>
-        <form id="finder-form"><label for="postcode">Your postcode or town</label><div class="search-row"><input id="postcode" name="postcode" placeholder="e.g. CV31 1AD" required><button class="button button-dark" type="submit">Search near me <span>→</span></button></div><p id="search-message" class="form-message" aria-live="polite"></p></form>
+        <form id="finder-form"><label for="postcode">Your postcode, town or business name</label><div class="search-row"><input id="postcode" name="postcode" placeholder="e.g. CV31 1AD, Birmingham or A1 Tiling" required autocomplete="postal-code"><button class="button button-dark" type="submit">Search directory <span>→</span></button></div><p id="search-message" class="form-message" aria-live="polite"></p></form>
         <div class="trust-points"><span>✓ Independent businesses</span><span>✓ Community connected</span><span>✓ Local to you</span></div>
+        <div id="directory-results" class="directory-results" aria-live="polite"></div>
+        <p class="directory-source">Business details are drawn from The Tile Association’s public directory as a starting dataset. Always open the official listing to confirm current membership, services and credentials before appointing anyone.</p>
       </div>
     </section>
 
@@ -115,7 +117,7 @@
     <section id="coming-soon" class="future-section section-pad"><div><p class="eyebrow">Coming next</p><h2>Your Tilers Community business profile.</h2><p>Member accounts are being built for the next phase. Tilers will be able to manage photos, contact details, services and reviews from one simple dashboard.</p></div><span class="status-pill">In development</span></section>
   </main>
 
-  <footer><a class="brand brand-image footer-brand" href="#top"><img src="assets/tilers-community-logo.jpeg" alt="Tilers Community"></a><div><p>Connecting independent people across the UK tile trade.</p><nav><a href="#homeowners">Homeowners</a><a href="#trade">Tilers</a><a href="#retailers">Retailers</a><a href="#manufacturers">Brands</a><a href="#guides">Advice</a></nav></div><small>© <span id="year"></span> Tilers Community. All rights reserved.</small></footer>
+  <footer><a class="brand brand-image footer-brand" href="#top"><img src="assets/tilers-community-logo-dark-bg.png" alt="Tilers Community"></a><div><p>Connecting independent people across the UK tile trade.</p><nav><a href="#homeowners">Homeowners</a><a href="#trade">Tilers</a><a href="#retailers">Retailers</a><a href="#manufacturers">Brands</a><a href="#guides">Advice</a></nav></div><small>© <span id="year"></span> Tilers Community. All rights reserved.</small></footer>
   <script src="script.js"></script>
 </body>
 </html>
