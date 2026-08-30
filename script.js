@@ -156,3 +156,26 @@ const observer = new IntersectionObserver((entries) => entries.forEach((entry) =
   }
 }), { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+document.querySelectorAll('.project-grid, .customer-steps, .question-grid').forEach((grid) => {
+  [...grid.children].forEach((item, index) => {
+    item.style.transitionDelay = `${Math.min(index * 70, 280)}ms`;
+  });
+});
+
+let scrollTicking = false;
+function updateScrollEffects() {
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+  document.documentElement.style.setProperty('--page-progress', Math.max(0, Math.min(1, progress)));
+  document.querySelector('.site-header').classList.toggle('scrolled', window.scrollY > 24);
+  scrollTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    requestAnimationFrame(updateScrollEffects);
+    scrollTicking = true;
+  }
+}, { passive: true });
+updateScrollEffects();
