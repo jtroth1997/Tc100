@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="premium.css?v=20260830-1">
 </head>
 <body class="customer-site">
   <div class="scroll-progress" aria-hidden="true"></div>
@@ -37,7 +38,6 @@
       <div class="finder-intro reveal"><p class="eyebrow dark">Start your search</p><h2>Who can help with your project?</h2><p>Enter your full postcode, town or a business name. Choose the type of help you need and we’ll show matching Tilers Community profiles.</p></div>
       <div class="finder-card reveal">
         <img class="finder-identity" src="assets/find-a-tiler-logo.jpg" alt="Find a Tiler by Tilers Community">
-        <div class="finder-tabs" role="tablist"><button class="active" data-type="tiler" role="tab">Tilers</button><button data-type="retailer" role="tab">Tile shops</button><button data-type="tile" role="tab">Find tiles</button><button data-type="product" role="tab">Products</button><button data-type="service" role="tab">Specialists</button></div>
         <form id="finder-form"><label for="postcode">Where is the work taking place?</label><div class="search-row"><input id="postcode" name="postcode" placeholder="Enter a full postcode or town" required autocomplete="postal-code"><button class="button button-dark" type="submit">Show local results <span>→</span></button></div><p id="search-message" class="form-message" aria-live="polite"></p></form>
         <div id="directory-results" class="directory-results" aria-live="polite"></div>
         <p class="directory-source">Before appointing anyone, discuss the job directly, check suitable insurance and references, and agree the specification, price and timescale in writing.</p>
@@ -88,6 +88,6 @@
 
   <dialog id="profile-dialog" class="profile-dialog"><button class="dialog-close" type="button" aria-label="Close profile">×</button><div id="profile-content"></div></dialog>
   <footer><a class="brand brand-image footer-brand" href="#top"><img src="assets/tilers-community-logo-dark-bg.png" alt="Tilers Community"></a><div><p>Helping homeowners find the right people for their tiling project.</p><nav><a href="#find">Find a tiler</a><a href="#prepare">Project guide</a><a href="resources.html">Advice</a><a href="#trade-link">For tilers</a></nav></div><small>© <span id="year"></span> Tilers Community.</small></footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260830-1"></script>
 </body>
 </html>
