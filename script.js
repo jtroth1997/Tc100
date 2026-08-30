@@ -11,7 +11,7 @@ nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () =>
   menuButton.setAttribute('aria-expanded', 'false');
 }));
 
-// Initial seed from publicly listed TTA directory entries. The official listing remains the source of truth.
+// Initial Tilers Community launch profiles. These will move to the member-managed directory when accounts launch.
 const directory = [
   { name: '550 Interiors Limited', address: '20A Rabone Lane, Smethwick, B66 3JH', region: 'West Midlands', types: ['tiler', 'service'] },
   { name: 'A & L Tiling Ltd', address: 'United Kingdom', region: 'UK', types: ['tiler'] },
@@ -25,9 +25,9 @@ const directory = [
   { name: 'A&B Flooring Ltd', address: 'Unit 15, Access 4:20, New Hythe Business Park, Aylesford, Kent, ME20 7HP', region: 'Kent', types: ['tiler', 'service'] },
   { name: 'A1 Tiling Ltd', address: '9–10 Cross Street, Preston, PR1 3LT', region: 'Preston', types: ['tiler'] },
   { name: 'ABD Ceramics Ltd', address: 'Unit 12 Riverside, Bolton, BL2 4NA', region: 'Bolton', types: ['retailer', 'tile', 'product'] },
-  { name: 'ADH Tiling Ltd', address: 'See official directory for current contact details', region: 'UK', types: ['tiler'] },
-  { name: 'AGH Ceramics', address: 'See official directory for current contact details', region: 'UK', types: ['tiler', 'service'] },
-  { name: 'Airey Tiling', address: 'See official directory for current contact details', region: 'UK', types: ['tiler'] }
+  { name: 'ADH Tiling Ltd', address: 'Profile contact details being confirmed', region: 'UK', types: ['tiler'] },
+  { name: 'AGH Ceramics', address: 'Profile contact details being confirmed', region: 'UK', types: ['tiler', 'service'] },
+  { name: 'Airey Tiling', address: 'Profile contact details being confirmed', region: 'UK', types: ['tiler'] }
 ];
 
 const labels = { tiler: 'Tiler / contractor', retailer: 'Tile retailer', tile: 'Tile supplier', product: 'Product supplier', service: 'Specialist service' };
@@ -35,6 +35,8 @@ let finderType = 'tiler';
 const results = document.querySelector('#directory-results');
 const message = document.querySelector('#search-message');
 const input = document.querySelector('#postcode');
+const profileDialog = document.querySelector('#profile-dialog');
+const profileContent = document.querySelector('#profile-content');
 
 function renderResults(items, query, exactMatch) {
   results.innerHTML = '';
@@ -46,11 +48,22 @@ function renderResults(items, query, exactMatch) {
   items.forEach((business) => {
     const card = document.createElement('article');
     card.className = 'result-card';
-    card.innerHTML = `<div class="result-monogram" aria-hidden="true">${business.name.charAt(0)}</div><div class="result-copy"><span class="result-type">${business.types.map((type) => labels[type]).filter(Boolean).join(' · ')}</span><h3>${business.name}</h3><p>${business.address}</p><small>${business.region}</small></div><a href="https://www.tiles.org.uk/directory/" target="_blank" rel="noopener" aria-label="Check ${business.name} in the official TTA directory">Check official listing ↗</a>`;
+    card.innerHTML = `<div class="result-monogram" aria-hidden="true">${business.name.charAt(0)}</div><div class="result-copy"><span class="result-type">${business.types.map((type) => labels[type]).filter(Boolean).join(' · ')}</span><h3>${business.name}</h3><p>${business.address}</p><small>${business.region}</small></div><button class="profile-button" type="button">View profile →</button>`;
+    card.querySelector('.profile-button').addEventListener('click', () => openProfile(business));
     results.appendChild(card);
   });
-  message.textContent = exactMatch ? `Results matching “${query}”. Check each official listing before making contact.` : `No exact text match for “${query}”, so we’re showing relevant ${labels[finderType].toLowerCase()} listings from the directory sample.`;
+  message.textContent = exactMatch ? `Tilers Community profiles matching “${query}”.` : `No exact text match for “${query}”, so we’re showing relevant ${labels[finderType].toLowerCase()} profiles.`;
 }
+
+function openProfile(business) {
+  profileContent.innerHTML = `<span class="result-type">Tilers Community profile</span><h2>${business.name}</h2><p class="profile-role">${business.types.map((type) => labels[type]).filter(Boolean).join(' · ')}</p><div class="profile-address"><small>Location</small><strong>${business.address}</strong><span>${business.region}</span></div><div class="profile-checklist"><h3>Before appointing any business</h3><ul><li>Ask for suitable insurance details</li><li>Review recent, relevant work and references</li><li>Get a written quotation and agreed scope</li><li>Confirm preparation, materials and timescales</li></ul></div><a class="button button-green" href="mailto:hello@tilerscommunity.co.uk?subject=Enquiry about ${encodeURIComponent(business.name)}">Request contact details <span>→</span></a>`;
+  profileDialog.showModal();
+}
+
+document.querySelector('.dialog-close').addEventListener('click', () => profileDialog.close());
+profileDialog.addEventListener('click', (event) => {
+  if (event.target === profileDialog) profileDialog.close();
+});
 
 document.querySelectorAll('.finder-tabs button').forEach((button) => button.addEventListener('click', () => {
   document.querySelectorAll('.finder-tabs button').forEach((item) => item.classList.remove('active'));
